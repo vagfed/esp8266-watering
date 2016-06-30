@@ -24,6 +24,20 @@ local function register_myself()
     end)
 end
 
+local function updateBroker()
+  if (temperature == nil) then
+    return
+  end
+  
+
+  local msg = {}
+  msg.temperature = temperature
+  msg.humdity = humidity
+  msg.irrigation = hardware.isValveOpen()
+
+  m:publish(config.ENDPOINT .. config.ID, cjson.encode(msg),0,0)
+end
+
 
 local function mqtt_start()
   m = mqtt.Client(config.ID, 120)  -- 120 sec keepalive, no user/pass
@@ -39,6 +53,12 @@ local function mqtt_start()
         updateBroker()
       elseif (data == "reset") then
         node.restart()
+      elseif (data == "open") then
+        hardware.openValve()
+	updateBroker()
+      elseif (data == "close") then
+        hardware.closeValve()
+	updateBroker()
       end
     end
   end)
@@ -49,7 +69,7 @@ local function mqtt_start()
     register_myself()
     -- ping every 60 seconds
     tmr.stop(6)
-    tmp.alarm(6, 60000, 1 send_ping)
+    tmr.alarm(6, 60000, 1, send_ping)
   end
   , function(conn, reason)
     print("Could not connect! Reason = " .. reason)
@@ -57,14 +77,14 @@ local function mqtt_start()
 end
 
 
-function module.start()
-  mqtt_start()
-  hardware_start()
+local function pollHW()
+  temperature = hardware.readTemp()
+  humidity = hardware.readSoilHumidity()
 end
 
 
 local function hardware_start()
-  hw.setup()
+  hardware.setup()
   pollHW()
   tmr.stop(5)
   tmr.alarm(5, polling * 1000, tmr.ALARM_AUTO, pollHW)
@@ -73,26 +93,12 @@ local function hardware_start()
 end
  
 
-
-local function updateBroker()
-  if (temperature == nil) then
-    return
-  end
-  
-
-  local msg = {}
-  msg.temperature = temperature
-  msg.humdity = humidity
-  msg.irrigation = hw.isValveOpen()
-
-  m:publish(config.ENDPOINT .. config.ID, cjson.encode(msg))
+function module.start()
+  mqtt_start()
+  hardware_start()
 end
 
 
-local function pollHW()
-  temperature = hw.readTemp()
-  humidity = hw.readSoilHumidity()
-end
 
 
 

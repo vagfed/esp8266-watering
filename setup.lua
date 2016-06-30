@@ -19,13 +19,15 @@ end
 
 local function wifi_start(list_aps)
   if list_aps then
-    for key,value in ipairs(list_aps) do
+    for key,value in pairs(list_aps) do
       if config.SSID and config.SSID[key] then
         wifi.setmode(wifi.STATION)
 	wifi.sta.config(key,config.SSID[key])
 	wifi.sta.connect()
 	print("Connecting to " .. key .. " ...")
 	tmr.alarm(1, 2500, tmr.ALARM_AUTO, wifi_wait_ip)
+      else
+        print("Skipping SSID " .. key)
       end
     end
   else

@@ -3,7 +3,7 @@
 
 local module = {}
 
-local tempPin = 2	-- DS18B20
+local tempPin = 1	-- DS18B20
 local valvePin = 6	-- relais for valve
 
 local addr		-- address of 1wire DS18B20
@@ -89,12 +89,12 @@ function module.readTemp()
   end
 
   ow.reset(tempPin)
-  ow.select(pin addr)
+  ow.select(pin, addr)
   ow.write(tempPin, 0x44, 1)
   tmr.delay(1000000)
   present = ow.reset(tempPin)
   ow.select(tempPin, addr)
-  ow.write(tempPin,i 0xBE, 1)
+  ow.write(tempPin, 0xBE, 1)
   print("P="..present)
   data = nil
   data = string.char(ow.read(tempPin))
@@ -133,3 +133,5 @@ function module.readTemp()
   end
   tmr.wdclr()
 end
+
+return module

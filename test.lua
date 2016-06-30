@@ -1,9 +1,9 @@
 -- file : test.lua
 -- it should become later init.lua
 
-app = require("application")
 config = require("config")
+hardware = require("hardware")
 setup = require("setup")
-hw = require("hardware")
+app = require("application")
 
 setup.start()
