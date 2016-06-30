@@ -8,11 +8,11 @@ local function wifi_wait_ip()
     print("IP unavalable. Waiting...")
   else
     tmr.stop(1)   -- stop timer 1
-    print("\n===============")
+    print("\n=================================")
     print("ESP8266 mode is : " .. wifi.getmode())
     print("MY address is   : " .. wifi.ap.getmac())
     print("IP is           : " .. wifi.sta.getip())
-    print("===============\n")
+    print("=================================\n")
     app.start()
   end
 end

@@ -42,9 +42,11 @@ function module.setup()
         print("Device is a DS18S20 family device")
       else
         print("Device family is not recognized")
+	addr = nil
       end
     else
       print("CRC is not valid")
+      addr = nil
     end
   end
 end
@@ -80,6 +82,11 @@ function module.readTemp()
   local i
   local crc
   local t
+
+  if (addr == nil) then
+    print "Temperature sensor not ready"
+    return "Not ready"
+  end
 
   ow.reset(tempPin)
   ow.select(pin addr)

@@ -3,7 +3,7 @@
 
 app = require("application")
 config = require("config")
-setup = requite("setup")
+setup = require("setup")
 hw = require("hardware")
 
 setup.start()

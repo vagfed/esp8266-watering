@@ -5,10 +5,10 @@ local module = {}
 
 module.SSID = {}
 module.SSID["myWifi1"] = "the password"
-module.SSID["myWifi1"] = "the password"
+module.SSID["myWifi2"] = "the password"
 
-module.HOST = "MQTT.host"
-module.PORT = 1884
+module.HOST = "the.server"
+module.PORT = 1883
 
 module.ID = node.chipid()
 module.ENDPOINT = "nodemcu/"

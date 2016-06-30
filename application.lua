@@ -1,6 +1,7 @@
 -- file : application.lua
 
 local module = {}
+
 local temperature = nil
 local humidity
 
@@ -36,6 +37,8 @@ local function mqtt_start()
       -- do domething, we have received a message
       if (data == "query") then
         updateBroker()
+      elseif (data == "reset") then
+        node.restart()
       end
     end
   end)
@@ -62,7 +65,7 @@ end
 
 local function hardware_start()
   hw.setup()
-  updateStatus()
+  pollHW()
   tmr.stop(5)
   tmr.alarm(5, polling * 1000, tmr.ALARM_AUTO, pollHW)
   tmr.stop(4)
